@@ -3,7 +3,7 @@
 import { CrewMember } from "@/types/crew-member";
 import { Box, Button, Modal, Typography } from "@mui/material";
 import { use, useEffect, useState } from "react";
-import { insertData, updateData } from "lib/actions";
+import { insertData } from "lib/actions";
 
 const style = {
   position: 'absolute',

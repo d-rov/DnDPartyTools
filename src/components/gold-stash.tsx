@@ -1,6 +1,6 @@
 'use client'
 
-import { Usable, use, useEffect, useState } from 'react'
+import { use, useEffect, useState } from 'react'
 import { ShipInfo } from '@/types/ship-info'
 import { updateData } from 'lib/actions'
 
