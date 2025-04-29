@@ -1,10 +1,9 @@
 'use client'
 
-import { supabase } from "lib/supabase-client";
-
 import { CrewMember } from "@/types/crew-member";
 import { Box, Button, Modal, Typography } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { insertData } from "lib/actions";
 
 const style = {
   position: 'absolute',
@@ -18,8 +17,8 @@ const style = {
   p: 4,
 };
 
-export default function CrewBarracks() {
-  const [crewRoster, setCrewRoster] = useState<CrewMember[]>([])
+export default function CrewBarracks({props}: {props: CrewMember[]}) {
+  const [crewRoster, setCrewRoster] = useState<CrewMember[]>(props)
   const [newCrewStats, setNewCrewStats] = useState({
     str: 0,
     dex: 0,
@@ -30,6 +29,7 @@ export default function CrewBarracks() {
   })
   const [newCrew, setNewCrew] = useState<CrewMember>({
     id: 0,
+    crew_name: "Bethany's Revenge",
     name: '',
     stats: {
       str: 0,
@@ -46,38 +46,6 @@ export default function CrewBarracks() {
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-
-  async function updateData(crewMate: CrewMember) {
-    const { data, error } = await supabase
-      .from('crew_roster')
-      .insert(crewMate)
-      // .eq('id', 1) // not programmatic atm
-
-      console.log('are we doing this right?')
-    if (error) {
-      console.error('Error inserting row into crew_roster table:', error)
-      return []
-    }
-    return data
-  }
-
-  useEffect(() => {
-      const fetchData = async () => {
-        const { data, error } = await supabase
-          .from('crew_roster')
-          .select('*')
-        if (data) {
-          setCrewRoster(data)
-        }
-        if (error) {
-          console.error('Error fetching from crew_roster table:', error)
-          return []
-        }
-        return data
-      }
-  
-      fetchData()
-    }, [])
 
   const handleFormChange = (event: { target: { value: string; name: string; }; }) => {
     const name = event.target.name
@@ -96,7 +64,12 @@ export default function CrewBarracks() {
   const addCrewMember = () => {
     const newCrewMate: CrewMember = {...newCrew, id: (crewRoster.length + 1), stats: newCrewStats}
     setNewCrew(newCrewMate)
-    updateData(newCrewMate)
+    setCrewRoster([...crewRoster, newCrewMate])
+    const tableName = 'crew_roster'
+    const toInsert = newCrewMate
+    const key = 'id'
+    const val = newCrewMate.id
+    insertData(tableName, toInsert, key, val)
   }
 
   return (
