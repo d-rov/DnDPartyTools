@@ -1,13 +1,11 @@
 'use client'
 
-import { use, useEffect, useState } from 'react'
-import { ShipInfo } from '@/types/ship-info'
+import { useEffect, useState } from 'react'
 import { updateData } from 'lib/actions'
+import { ShipInfo } from '@/types/ship-info'
 
-export default function GoldStash(props) {
-  const shipInfo: ShipInfo[] = use(props)
-
-  const [gold, setGold] = useState(shipInfo.at(0).crew_gold)
+export default function GoldStash({props}: {props: ShipInfo}) {
+  const [gold, setGold] = useState(props.crew_gold)
   const [changeValue, setChangeValue] = useState(0)
 
   const incrementGold = () => {

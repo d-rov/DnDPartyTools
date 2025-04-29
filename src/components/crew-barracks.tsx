@@ -2,7 +2,7 @@
 
 import { CrewMember } from "@/types/crew-member";
 import { Box, Button, Modal, Typography } from "@mui/material";
-import { use, useEffect, useState } from "react";
+import { useState } from "react";
 import { insertData } from "lib/actions";
 
 const style = {
@@ -17,10 +17,8 @@ const style = {
   p: 4,
 };
 
-export default function CrewBarracks(props) {
-  const crew: CrewMember[] = use(props)
-
-  const [crewRoster, setCrewRoster] = useState<CrewMember[]>(crew)
+export default function CrewBarracks({props}: {props: CrewMember[]}) {
+  const [crewRoster, setCrewRoster] = useState<CrewMember[]>(props)
   const [newCrewStats, setNewCrewStats] = useState({
     str: 0,
     dex: 0,
@@ -31,6 +29,7 @@ export default function CrewBarracks(props) {
   })
   const [newCrew, setNewCrew] = useState<CrewMember>({
     id: 0,
+    crew_name: "Bethany's Revenge",
     name: '',
     stats: {
       str: 0,
@@ -65,16 +64,13 @@ export default function CrewBarracks(props) {
   const addCrewMember = () => {
     const newCrewMate: CrewMember = {...newCrew, id: (crewRoster.length + 1), stats: newCrewStats}
     setNewCrew(newCrewMate)
+    setCrewRoster([...crewRoster, newCrewMate])
     const tableName = 'crew_roster'
     const toInsert = newCrewMate
     const key = 'id'
     const val = newCrewMate.id
     insertData(tableName, toInsert, key, val)
   }
-
-  useEffect(() => {
-    setCrewRoster([...crewRoster, newCrew])
-  }, [newCrew])
 
   return (
     <div>
