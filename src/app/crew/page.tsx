@@ -1,7 +1,4 @@
-import { supabase } from 'lib/supabase-client'
-
 import Link from 'next/link'
-// import shipData from '@/data/database.json'
 import React from 'react'
 import GoldStash from '@/components/gold-stash'
 import CrewBarracks from '@/components/crew-barracks'

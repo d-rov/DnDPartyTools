@@ -3,8 +3,6 @@
 import { supabase } from 'lib/supabase-client'
 
 import { useEffect, useState } from 'react'
-import { updateData } from '@/app/actions'
-import { ShipInfo } from '@/types/ship-info'
 
 export default function GoldStash() {
   const [gold, setGold] = useState(0)

@@ -2,8 +2,6 @@
 
 import { supabase } from "lib/supabase-client";
 
-import { updateData } from "@/app/actions";
-import { CrewInfo } from "@/types/crew-info";
 import { CrewMember } from "@/types/crew-member";
 import { Box, Button, Modal, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
