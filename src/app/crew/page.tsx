@@ -13,7 +13,7 @@ export default function Page() {
       <h1>Crew Info</h1>
         <h2>Bethany's Revenge</h2>
         <GoldStash />
-        {/* <CrewBarracks /> */}
+        <CrewBarracks />
     </div>
   )
 }

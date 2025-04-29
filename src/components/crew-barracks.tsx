@@ -1,5 +1,7 @@
 'use client'
 
+import { supabase } from "lib/supabase-client";
+
 import { updateData } from "@/app/actions";
 import { CrewInfo } from "@/types/crew-info";
 import { CrewMember } from "@/types/crew-member";
@@ -18,8 +20,8 @@ const style = {
   p: 4,
 };
 
-export default function CrewBarracks(props: CrewInfo) {
-  const [crewRoster, setCrewRoster] = useState(props.ship_crew)
+export default function CrewBarracks() {
+  const [crewRoster, setCrewRoster] = useState<CrewMember[]>([])
   const [newCrewStats, setNewCrewStats] = useState({
     str: 0,
     dex: 0,
@@ -44,6 +46,24 @@ export default function CrewBarracks(props: CrewInfo) {
   })
   const [open, setOpen] = useState(false);
 
+  useEffect(() => {
+      const fetchData = async () => {
+        const { data, error } = await supabase
+          .from('crew_roster')
+          .select('*')
+        if (data) {
+          setCrewRoster(data)
+        }
+        if (error) {
+          console.error('Error fetching from crew_roster table:', error)
+          return []
+        }
+        return data
+      }
+  
+      fetchData()
+    }, [])
+
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
@@ -65,12 +85,12 @@ export default function CrewBarracks(props: CrewInfo) {
     setCrewRoster([...crewRoster, {...newCrew, id: (crewRoster.length + 1), stats: newCrewStats}])
   }
 
-  useEffect(() => {
-      const saveInfo: CrewInfo = {...props}
-      saveInfo.ship_crew = crewRoster
-      // console.log(saveInfo)
-      updateData(saveInfo)
-    }, [crewRoster])
+  // useEffect(() => {
+  //     const saveInfo: CrewInfo = {}
+  //     saveInfo.ship_crew = crewRoster
+  //     // console.log(saveInfo)
+  //     updateData(saveInfo)
+  //   }, [crewRoster])
 
   return (
     <div>
