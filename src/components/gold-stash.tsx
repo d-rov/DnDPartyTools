@@ -33,6 +33,7 @@ export default function GoldStash(props: CrewInfo) {
       <p>Gold: {gold}</p>
       <button onClick={decrementGold}>-</button>
       <input
+        name="gold"
         value={changeValue}
         onChange={handleValueChange}
       />
