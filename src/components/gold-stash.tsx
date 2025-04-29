@@ -2,49 +2,14 @@
 
 import { supabase } from 'lib/supabase-client'
 
-import { useEffect, useState } from 'react'
+import { use, useEffect, useState } from 'react'
+import { ShipInfo } from '@/types/ship-info'
+import { updateData } from 'lib/actions'
 
-export default function GoldStash() {
-  const [gold, setGold] = useState(0)
+export default function GoldStash({props}: { props: Promise<ShipInfo[]> }) {
+  const shipInfo = use(props)
+  const [gold, setGold] = useState(shipInfo.at(0).crew_gold)
   const [changeValue, setChangeValue] = useState(0)
-
-  async function updateData() {
-    const { data, error } = await supabase
-      .from('ship_info')
-      .update({crew_gold: gold})
-      .eq('id', 1) // not programmatic atm
-
-      console.log('are we doing this right?')
-    if (error) {
-      console.error('Error updating data for ship_info table:', error)
-      return []
-    }
-    return data
-  }
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const { data, error } = await supabase
-        .from('ship_info')
-        .select()
-        .eq('crew_name', "Bethany's Revenge") // not programmatic atm
-      if (data) {
-        setGold(data.at(0).crew_gold)
-      }
-      if (error) {
-        console.error('Error fetching from ship_info table:', error)
-        return []
-      }
-      return data
-    }
-
-    fetchData()
-  }, [])
-
-  useEffect(() => {
-    console.log("mutate row")
-    updateData()
-  }, [gold])
 
   const incrementGold = () => {
     setGold(gold + changeValue)
@@ -58,6 +23,15 @@ export default function GoldStash() {
     const val = parseInt(event.target.value)
     setChangeValue(isNaN(val) ? 0 : val)
   }
+
+  useEffect(() => {
+    console.log("mutate row")
+    const tableName = 'ship_info'
+    const toUpdate = {'crew_gold': gold}
+    const key = 'crew_name'
+    const val = "Bethany's Revenge"
+    updateData(tableName, toUpdate, key, val)
+  }, [gold])
 
   return (
     <div>

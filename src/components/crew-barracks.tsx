@@ -5,6 +5,8 @@ import { supabase } from "lib/supabase-client";
 import { CrewMember } from "@/types/crew-member";
 import { Box, Button, Modal, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
+import { revalidatePath } from "next/cache";
+import { updateData } from "lib/actions";
 
 const style = {
   position: 'absolute',
@@ -47,20 +49,6 @@ export default function CrewBarracks() {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  async function updateData(crewMate: CrewMember) {
-    const { data, error } = await supabase
-      .from('crew_roster')
-      .insert(crewMate)
-      // .eq('id', 1) // not programmatic atm
-
-      console.log('are we doing this right?')
-    if (error) {
-      console.error('Error inserting row into crew_roster table:', error)
-      return []
-    }
-    return data
-  }
-
   useEffect(() => {
       const fetchData = async () => {
         const { data, error } = await supabase
@@ -96,7 +84,11 @@ export default function CrewBarracks() {
   const addCrewMember = () => {
     const newCrewMate: CrewMember = {...newCrew, id: (crewRoster.length + 1), stats: newCrewStats}
     setNewCrew(newCrewMate)
-    updateData(newCrewMate)
+    const tableName = 'crew_roster'
+    const toUpdate = newCrewMate
+    const key = 'id'
+    const val = newCrewMate.id
+    updateData(tableName, toUpdate, key, val)
   }
 
   return (
