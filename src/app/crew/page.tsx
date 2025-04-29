@@ -8,7 +8,7 @@ export default function Page() {
     <div>
       <Link href="/">Home</Link>
       <h1>Crew Info</h1>
-        <h2>Bethany&apos;'s Revenge</h2>
+        <h2>Bethany&apos;s Revenge</h2>
         <GoldStash />
         <CrewBarracks />
     </div>
