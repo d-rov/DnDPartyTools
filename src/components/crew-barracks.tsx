@@ -44,6 +44,23 @@ export default function CrewBarracks() {
   })
   const [open, setOpen] = useState(false);
 
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
+  async function updateData(crewMate: CrewMember) {
+    const { data, error } = await supabase
+      .from('crew_roster')
+      .insert(crewMate)
+      // .eq('id', 1) // not programmatic atm
+
+      console.log('are we doing this right?')
+    if (error) {
+      console.error('Error inserting row into crew_roster table:', error)
+      return []
+    }
+    return data
+  }
+
   useEffect(() => {
       const fetchData = async () => {
         const { data, error } = await supabase
@@ -62,9 +79,6 @@ export default function CrewBarracks() {
       fetchData()
     }, [])
 
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-
   const handleFormChange = (event: { target: { value: string; name: string; }; }) => {
     const name = event.target.name
     const val = event.target.value
@@ -80,15 +94,10 @@ export default function CrewBarracks() {
   }
 
   const addCrewMember = () => {
-    setCrewRoster([...crewRoster, {...newCrew, id: (crewRoster.length + 1), stats: newCrewStats}])
+    const newCrewMate: CrewMember = {...newCrew, id: (crewRoster.length + 1), stats: newCrewStats}
+    setNewCrew(newCrewMate)
+    updateData(newCrewMate)
   }
-
-  // useEffect(() => {
-  //     const saveInfo: CrewInfo = {}
-  //     saveInfo.ship_crew = crewRoster
-  //     // console.log(saveInfo)
-  //     updateData(saveInfo)
-  //   }, [crewRoster])
 
   return (
     <div>
