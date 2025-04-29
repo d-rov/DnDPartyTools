@@ -1,5 +1,4 @@
 import { supabase } from 'lib/supabase-client'
-import { Database } from '@/types/database.types';
 
 import Link from 'next/link'
 import GoldStash from '@/components/gold-stash'
