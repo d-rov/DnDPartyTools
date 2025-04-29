@@ -1,5 +1,7 @@
+import { supabase } from 'lib/supabase-client'
+
 import Link from 'next/link'
-import shipData from '@/data/database.json'
+// import shipData from '@/data/database.json'
 import React from 'react'
 import GoldStash from '@/components/gold-stash'
 import CrewBarracks from '@/components/crew-barracks'
@@ -9,9 +11,9 @@ export default function Page() {
     <div>
       <Link href="/">Home</Link>
       <h1>Crew Info</h1>
-        <h2>{shipData.crewName}</h2>
-        <GoldStash {...shipData}/>
-        <CrewBarracks {...shipData}/>
+        <h2>Bethany's Revenge</h2>
+        <GoldStash />
+        {/* <CrewBarracks /> */}
     </div>
   )
 }

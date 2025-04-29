@@ -19,7 +19,7 @@ const style = {
 };
 
 export default function CrewBarracks(props: CrewInfo) {
-  const [crewRoster, setCrewRoster] = useState(props.shipCrew)
+  const [crewRoster, setCrewRoster] = useState(props.ship_crew)
   const [newCrewStats, setNewCrewStats] = useState({
     str: 0,
     dex: 0,
@@ -67,7 +67,7 @@ export default function CrewBarracks(props: CrewInfo) {
 
   useEffect(() => {
       const saveInfo: CrewInfo = {...props}
-      saveInfo.shipCrew = crewRoster
+      saveInfo.ship_crew = crewRoster
       // console.log(saveInfo)
       updateData(saveInfo)
     }, [crewRoster])
