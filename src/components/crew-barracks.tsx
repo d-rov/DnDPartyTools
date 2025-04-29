@@ -1,12 +1,9 @@
 'use client'
 
-import { supabase } from "lib/supabase-client";
-
 import { CrewMember } from "@/types/crew-member";
 import { Box, Button, Modal, Typography } from "@mui/material";
-import { useEffect, useState } from "react";
-import { revalidatePath } from "next/cache";
-import { updateData } from "lib/actions";
+import { use, useEffect, useState } from "react";
+import { insertData, updateData } from "lib/actions";
 
 const style = {
   position: 'absolute',
@@ -20,8 +17,10 @@ const style = {
   p: 4,
 };
 
-export default function CrewBarracks() {
-  const [crewRoster, setCrewRoster] = useState<CrewMember[]>([])
+export default function CrewBarracks(props) {
+  const crew: CrewMember[] = use(props)
+
+  const [crewRoster, setCrewRoster] = useState<CrewMember[]>(crew)
   const [newCrewStats, setNewCrewStats] = useState({
     str: 0,
     dex: 0,
@@ -49,24 +48,6 @@ export default function CrewBarracks() {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  useEffect(() => {
-      const fetchData = async () => {
-        const { data, error } = await supabase
-          .from('crew_roster')
-          .select('*')
-        if (data) {
-          setCrewRoster(data)
-        }
-        if (error) {
-          console.error('Error fetching from crew_roster table:', error)
-          return []
-        }
-        return data
-      }
-  
-      fetchData()
-    }, [])
-
   const handleFormChange = (event: { target: { value: string; name: string; }; }) => {
     const name = event.target.name
     const val = event.target.value
@@ -85,11 +66,15 @@ export default function CrewBarracks() {
     const newCrewMate: CrewMember = {...newCrew, id: (crewRoster.length + 1), stats: newCrewStats}
     setNewCrew(newCrewMate)
     const tableName = 'crew_roster'
-    const toUpdate = newCrewMate
+    const toInsert = newCrewMate
     const key = 'id'
     const val = newCrewMate.id
-    updateData(tableName, toUpdate, key, val)
+    insertData(tableName, toInsert, key, val)
   }
+
+  useEffect(() => {
+    setCrewRoster([...crewRoster, newCrew])
+  }, [newCrew])
 
   return (
     <div>

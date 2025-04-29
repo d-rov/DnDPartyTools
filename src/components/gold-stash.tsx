@@ -1,13 +1,12 @@
 'use client'
 
-import { supabase } from 'lib/supabase-client'
-
-import { use, useEffect, useState } from 'react'
+import { Usable, use, useEffect, useState } from 'react'
 import { ShipInfo } from '@/types/ship-info'
 import { updateData } from 'lib/actions'
 
-export default function GoldStash({props}: { props: Promise<ShipInfo[]> }) {
-  const shipInfo = use(props)
+export default function GoldStash(props) {
+  const shipInfo: ShipInfo[] = use(props)
+
   const [gold, setGold] = useState(shipInfo.at(0).crew_gold)
   const [changeValue, setChangeValue] = useState(0)
 
