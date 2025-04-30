@@ -18,6 +18,7 @@ const style = {
 };
 
 export default function CrewBarracks({props}: {props: CrewMember[]}) {
+  console.log(props)
   const [crewRoster, setCrewRoster] = useState<CrewMember[]>(props)
   const [newCrewStats, setNewCrewStats] = useState({
     str: 0,
